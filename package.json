@@ -7,8 +7,10 @@
   "scripts": {
     "start": "node dist/main/server.js",
     "build": "rimraf dist && tsc -p tsconfig-build.json",
-    "up": "yarn run build && sudo docker-compose up -d",
-    "down": "sudo docker-compose down",
+    "up": "yarn run build && docker-compose up -d",
+    "down": "docker-compose down",
+    "up:sudo": "yarn run build && sudo docker-compose up -d",
+    "down:sudo": "sudo docker-compose down",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:verbose": "jest --passWithNoTests --runInBand",
     "test:unit": "yarn test --watch -c jest-unit-config.js",
