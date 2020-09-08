@@ -4,6 +4,10 @@ import { Collection } from 'mongodb'
 
 let surveyCollection: Collection
 
+const makeSut = (): SurveyMongoRepository => {
+  return new SurveyMongoRepository()
+}
+
 describe('Survey Mongo Repository', () => {
   beforeAll(async () => {
     await MongoHelper.connect(process.env.MONGO_URL)
@@ -17,10 +21,6 @@ describe('Survey Mongo Repository', () => {
     surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
   })
-
-  const makeSut = (): SurveyMongoRepository => {
-    return new SurveyMongoRepository()
-  }
 
   describe('add()', () => {
     test('Should add a survey on success', async () => {
