@@ -4,7 +4,7 @@
 
 1. [x] Recebe uma requisição do tipo **GET** na rota **/api/surveys/{survey_id}/results**
 2. [x] Valida se a requisição foi feita por um **usuário**
-3. [ ] Retorna **200** com os dados do resultado da enquete
+3. [x] Retorna **200** com os dados do resultado da enquete
 
 > ## Exceções
 
