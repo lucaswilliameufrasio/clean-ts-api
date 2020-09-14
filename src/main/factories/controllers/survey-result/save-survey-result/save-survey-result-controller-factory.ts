@@ -4,7 +4,7 @@ import { SaveSurveyResultController } from '@/presentation/controllers/survey-re
 import { makeDbLoadSurveyById } from '@/main/factories/usecases/survey/load-survey-by-id/db-load-surveys-factory'
 import { makeDbSaveSurveyResult } from '@/main/factories/usecases/survey-result/save-survey-result/db-save-survey-result-factory'
 
-export const makeLoadSurveyResultController = (): Controller => {
+export const makeSaveSurveyResultController = (): Controller => {
   const controller = new SaveSurveyResultController(makeDbLoadSurveyById(), makeDbSaveSurveyResult())
   return makeLogControllerDecorator(controller)
 }
