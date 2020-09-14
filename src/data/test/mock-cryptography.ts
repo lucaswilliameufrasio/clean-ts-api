@@ -2,42 +2,45 @@ import { Hasher } from '@/data/protocols/cryptography/hasher'
 import { HashedComparer } from '@/data/protocols/cryptography/hash-comparer'
 import { Encrypter } from '@/data/protocols/cryptography/encrypter'
 import { Decrypter } from '@/data/protocols/cryptography/decrypter'
+import faker from 'faker'
 
-export const mockHasher = (): Hasher => {
-  class HasherStub implements Hasher {
-    async hash (value: string): Promise<string> {
-      return 'hashed_password'
-    }
+export class DecrypterSpy implements Decrypter {
+  plaintext = faker.internet.password()
+  ciphertext: string
+
+  async decrypt (ciphertext: string): Promise<string> {
+    this.ciphertext = ciphertext
+
+    return this.plaintext
   }
+}
+export class EncrypterSpy implements Encrypter {
+  ciphertext = faker.random.uuid()
+  plaintext: string
 
-  return new HasherStub()
+  async encrypt (plaintext: string): Promise<string> {
+    this.plaintext = plaintext
+    return this.ciphertext
+  }
+}
+export class HasherSpy implements Hasher {
+  digest = faker.random.uuid()
+  plaintext: string
+
+  async hash (plaintext: string): Promise<string> {
+    this.plaintext = plaintext
+    return this.digest
+  }
 }
 
-export const mockDecrypter = (): Decrypter => {
-  class DecrypterStub implements Decrypter {
-    async decrypt (value: string): Promise<string> {
-      return 'any_value'
-    }
+export class HashedComparerSpy implements HashedComparer {
+  plaintext = faker.internet.password()
+  digest = faker.random.uuid()
+  isValid = true
+
+  async compare (plaintext: string, digest: string): Promise<boolean> {
+    this.plaintext = plaintext
+    this.digest = digest
+    return this.isValid
   }
-  return new DecrypterStub()
-}
-
-export const mockEncrypter = (): Encrypter => {
-  class EncrypterStub implements Encrypter {
-    async encrypt (id: string): Promise<string> {
-      return 'any_token'
-    }
-  }
-
-  return new EncrypterStub()
-}
-
-export const mockHashComparer = (): HashedComparer => {
-  class HashedComparerStub implements HashedComparer {
-    async compare (value: string, hash: string): Promise<boolean> {
-      return true
-    }
-  }
-
-  return new HashedComparerStub()
 }
