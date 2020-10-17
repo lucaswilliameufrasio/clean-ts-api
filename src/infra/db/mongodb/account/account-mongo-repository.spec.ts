@@ -28,15 +28,15 @@ describe('AccountMongoRepository', () => {
     test('Should return an account on success', async () => {
       const sut = makeSut()
 
-      const addAddAccountParams = mockAddAccountParams()
+      const addAccountParams = mockAddAccountParams()
 
-      const account = await sut.add(addAddAccountParams)
+      const account = await sut.add(addAccountParams)
 
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
-      expect(account.name).toBe(addAddAccountParams.name)
-      expect(account.email).toBe(addAddAccountParams.email)
-      expect(account.password).toBe(addAddAccountParams.password)
+      expect(account.name).toBe(addAccountParams.name)
+      expect(account.email).toBe(addAccountParams.email)
+      expect(account.password).toBe(addAccountParams.password)
     })
   })
 
@@ -44,15 +44,15 @@ describe('AccountMongoRepository', () => {
     test('Should return an account on success', async () => {
       const sut = makeSut()
 
-      const addAddAccountParams = mockAddAccountParams()
-      await accountCollection.insertOne(addAddAccountParams)
-      const account = await sut.loadByEmail(addAddAccountParams.email)
+      const addAccountParams = mockAddAccountParams()
+      await accountCollection.insertOne(addAccountParams)
+      const account = await sut.loadByEmail(addAccountParams.email)
 
       expect(account).toBeTruthy()
       expect(account.id).toBeTruthy()
-      expect(account.name).toBe(addAddAccountParams.name)
-      expect(account.email).toBe(addAddAccountParams.email)
-      expect(account.password).toBe(addAddAccountParams.password)
+      expect(account.name).toBe(addAccountParams.name)
+      expect(account.email).toBe(addAccountParams.email)
+      expect(account.password).toBe(addAccountParams.password)
     })
 
     test('Should return null if loadByEmail fails', async () => {
