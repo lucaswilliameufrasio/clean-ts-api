@@ -1,6 +1,7 @@
 import { HasherSpy, AddAccountRepositorySpy, LoadAccountByEmailRepositorySpy } from '../mocks'
-import { mockAccountModel, mockAddAccountParams, throwError } from '../../domain/mocks'
+import { mockAddAccountParams, throwError } from '../../domain/mocks'
 import { DbAddAccount } from '@/data/usecases'
+import faker from 'faker'
 
 type SutTypes = {
   sut: DbAddAccount
@@ -13,7 +14,7 @@ const makeSut = (): SutTypes => {
   const hasherSpy = new HasherSpy()
   const addAccountRepositorySpy = new AddAccountRepositorySpy()
   const loadAccountByEmailRepositorySpy = new LoadAccountByEmailRepositorySpy()
-  loadAccountByEmailRepositorySpy.accountModel = null
+  loadAccountByEmailRepositorySpy.result = null
   const sut = new DbAddAccount(hasherSpy, addAccountRepositorySpy, loadAccountByEmailRepositorySpy)
 
   return {
@@ -68,7 +69,7 @@ describe('DbAddAccount UseCase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return true if LoadAccountByEmailRepository returns null', async () => {
+  test('Should return true on success', async () => {
     const { sut } = makeSut()
 
     const isValid = await sut.add(mockAddAccountParams())
@@ -76,10 +77,22 @@ describe('DbAddAccount UseCase', () => {
     expect(isValid).toEqual(true)
   })
 
+  test('Should return false if AddAccountRepository returns false', async () => {
+    const { sut, addAccountRepositorySpy } = makeSut()
+    addAccountRepositorySpy.result = false
+
+    const isValid = await sut.add(mockAddAccountParams())
+
+    expect(isValid).toEqual(false)
+  })
+
   test('Should return false if LoadAccountByEmailRepository returns an account', async () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
-
-    jest.spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail').mockReturnValueOnce(Promise.resolve(mockAccountModel()))
+    loadAccountByEmailRepositorySpy.result = {
+      id: faker.random.uuid(),
+      name: faker.name.findName(),
+      password: faker.internet.password()
+    }
 
     const isValid = await sut.add(mockAddAccountParams())
 
