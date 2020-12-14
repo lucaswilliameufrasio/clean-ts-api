@@ -1,5 +1,5 @@
 import { LogControllerDecorator } from '@/main/decorators'
-import { Controller, HttpRequest, HttpResponse } from '@/presentation/protocols'
+import { Controller, HttpResponse } from '@/presentation/protocols'
 import { serverError, ok } from '@/presentation/helpers'
 import { LogErrorRepositorySpy } from '../../data/mocks'
 import { mockAccountModel } from '../../domain/mocks'
@@ -7,24 +7,11 @@ import faker from 'faker'
 
 class ControllerSpy implements Controller {
   httpResponse = ok(mockAccountModel())
-  httpRequest: HttpRequest
+  request: any
 
-  async handle (httpRequest: HttpRequest): Promise<HttpResponse> {
-    this.httpRequest = httpRequest
+  async handle (request: any): Promise<HttpResponse> {
+    this.request = request
     return this.httpResponse
-  }
-}
-
-const mockRequest = (): HttpRequest => {
-  const password = faker.internet.password()
-
-  return {
-    body: {
-      name: faker.name.findName(),
-      email: faker.internet.password(),
-      password,
-      passwordConfirmation: password
-    }
   }
 }
 
@@ -57,16 +44,16 @@ describe('LogController Decorator', () => {
   test('Should call controller handle', async () => {
     const { sut, controllerSpy } = makeSut()
 
-    const httpRequest = mockRequest()
-    await sut.handle(httpRequest)
+    const request = faker.lorem.sentence()
+    await sut.handle(request)
 
-    expect(controllerSpy.httpRequest).toEqual(httpRequest)
+    expect(controllerSpy.request).toEqual(request)
   })
 
   test('Should return the same result of the controller', async () => {
     const { sut, controllerSpy } = makeSut()
 
-    const httpResponse = await sut.handle(mockRequest())
+    const httpResponse = await sut.handle(faker.lorem.sentence())
 
     expect(httpResponse).toEqual(controllerSpy.httpResponse)
   })
@@ -77,7 +64,7 @@ describe('LogController Decorator', () => {
     const serverError = mockServerError()
     controllerSpy.httpResponse = serverError
 
-    await sut.handle(mockRequest())
+    await sut.handle(faker.lorem.sentence())
 
     expect(logErrorRepositorySpy.stack).toBe(serverError.body.stack)
   })
