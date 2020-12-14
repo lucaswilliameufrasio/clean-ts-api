@@ -44,7 +44,7 @@ describe('Auth Middleware', () => {
   test('Should return 403 if LoadAccountByToken returns null', async () => {
     const { sut, loadAccountByTokenSpy } = makeSut()
 
-    loadAccountByTokenSpy.accountModel = null
+    loadAccountByTokenSpy.result = null
     const httpResponse = await sut.handle(mockRequest())
 
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()))
@@ -56,7 +56,7 @@ describe('Auth Middleware', () => {
     const httpResponse = await sut.handle(mockRequest())
 
     expect(httpResponse).toEqual(ok({
-      accountId: loadAccountByTokenSpy.accountModel.id
+      accountId: loadAccountByTokenSpy.result.id
     }))
   })
 
