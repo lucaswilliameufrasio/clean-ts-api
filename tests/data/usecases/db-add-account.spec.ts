@@ -68,22 +68,22 @@ describe('DbAddAccount UseCase', () => {
     await expect(promise).rejects.toThrow()
   })
 
-  test('Should return an account on success', async () => {
-    const { sut, addAccountRepositorySpy } = makeSut()
+  test('Should return true if LoadAccountByEmailRepository returns null', async () => {
+    const { sut } = makeSut()
 
-    const account = await sut.add(mockAddAccountParams())
+    const isValid = await sut.add(mockAddAccountParams())
 
-    expect(account).toEqual(addAccountRepositorySpy.accountModel)
+    expect(isValid).toEqual(true)
   })
 
-  test('Should return null if LoadAccountByEmailRepository not return null', async () => {
+  test('Should return false if LoadAccountByEmailRepository returns an account', async () => {
     const { sut, loadAccountByEmailRepositorySpy } = makeSut()
 
     jest.spyOn(loadAccountByEmailRepositorySpy, 'loadByEmail').mockReturnValueOnce(Promise.resolve(mockAccountModel()))
 
-    const account = await sut.add(mockAddAccountParams())
+    const isValid = await sut.add(mockAddAccountParams())
 
-    expect(account).toBeNull()
+    expect(isValid).toBe(false)
   })
 
   test('Should call LoadAccountByEmailRepository with correct email', async () => {
