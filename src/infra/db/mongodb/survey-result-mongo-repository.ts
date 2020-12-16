@@ -1,4 +1,4 @@
-import { MongoHelper, QueryBuilder } from '.'
+import { MongoHelper, QueryBuilder } from '@/infra/db'
 import { SaveSurveyResultRepository, LoadSurveyResultRepository } from '@/data/protocols'
 import { SaveSurveyResultParams } from '@/domain/usecases'
 import { SurveyResultModel } from '@/domain/models'
