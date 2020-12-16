@@ -1,7 +1,7 @@
 import { AddSurveyController } from '@/presentation/controllers'
 import { badRequest, serverError, noContent } from '@/presentation/helpers'
-import { AddSurveySpy, ValidationSpy } from '../mocks'
-import { throwError } from '../../domain/mocks'
+import { AddSurveySpy, ValidationSpy } from '@/tests/presentation/mocks'
+import { throwError } from '@/tests/domain/mocks'
 import MockDate from 'mockdate'
 import faker from 'faker'
 

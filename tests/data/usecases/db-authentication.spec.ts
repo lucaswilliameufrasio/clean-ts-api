@@ -3,8 +3,8 @@ import {
   HashedComparerSpy,
   LoadAccountByEmailRepositorySpy,
   UpdateAccessTokenRepositorySpy
-} from '../mocks'
-import { mockAuthenticationParams, throwError } from '../../domain/mocks'
+} from '@/tests/data/mocks'
+import { mockAuthenticationParams, throwError } from '@/tests/domain/mocks'
 import { DbAuthentication } from '@/data/usecases'
 
 type SutTypes = {

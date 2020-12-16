@@ -1,7 +1,7 @@
 import { SaveSurveyResult, SaveSurveyResultParams } from '@/domain/usecases/save-survey-result'
 import { LoadSurveyResult } from '@/domain/usecases/load-survey-result'
 import { SurveyResultModel } from '@/domain/models/survey-result'
-import { mockSurveyResultModel } from '@/../tests/domain/mocks'
+import { mockSurveyResultModel } from '@/tests/domain/mocks'
 
 export class SaveSurveyResultSpy implements SaveSurveyResult {
   surveyResultModel = mockSurveyResultModel()

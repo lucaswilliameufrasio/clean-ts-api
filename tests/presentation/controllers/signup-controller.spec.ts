@@ -1,8 +1,8 @@
 import { SignUpController } from '@/presentation/controllers'
 import { MissingParamError, ServerError, EmailInUseError } from '@/presentation/errors'
 import { ok, badRequest, serverError, forbidden } from '@/presentation/helpers'
-import { AuthenticationSpy, ValidationSpy, AddAccountSpy } from '../mocks'
-import { throwError } from '../../domain/mocks'
+import { AuthenticationSpy, ValidationSpy, AddAccountSpy } from '@/tests/presentation/mocks'
+import { throwError } from '@/tests/domain/mocks'
 import faker from 'faker'
 
 const mockRequest = (): SignUpController.Request => ({
