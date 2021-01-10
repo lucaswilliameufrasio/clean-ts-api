@@ -39,8 +39,8 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository, 
       })
       .lookup({
         from: 'surveys',
-        localField: 'data.surveyId',
         foreignField: '_id',
+        localField: 'data.surveyId',
         as: 'survey'
       })
       .unwind({
@@ -60,7 +60,7 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository, 
         },
         currentAccountAnswer: {
           $push: {
-            $cond: [{ $eq: ['$data.accountId', accountId] }, '$data.answer', null]
+            $cond: [{ $eq: ['$data.accountId', accountId] }, '$data.answer', '$invalid']
           }
         }
       })
@@ -74,47 +74,37 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository, 
             input: '$_id.answers',
             as: 'item',
             in: {
-              $mergeObjects: [
-                '$$item', {
-                  count: {
-                    $cond: {
-                      if: {
-                        $eq: [
-                          '$$item.answer', '$_id.answer'
-                        ]
-                      },
-                      then: '$count',
-                      else: 0
-                    }
-                  },
-                  percent: {
-                    $cond: {
-                      if: {
-                        $eq: [
-                          '$$item.answer', '$_id.answer'
-                        ]
-                      },
-                      then: {
-                        $multiply: [
-                          {
-                            $divide: [
-                              '$count', '$_id.total'
-                            ]
-                          }, 100
-                        ]
-                      },
-                      else: 0
-                    }
-                  },
-                  isCurrentAccountAnswer: {
-                    $eq: [
-                      '$$item.answer', {
-                        $arrayElemAt: ['$currentAccountAnswer', 0]
-                      }
-                    ]
+              $mergeObjects: ['$$item', {
+                count: {
+                  $cond: {
+                    if: {
+                      $eq: ['$$item.answer', '$_id.answer']
+                    },
+                    then: '$count',
+                    else: 0
                   }
+                },
+                percent: {
+                  $cond: {
+                    if: {
+                      $eq: ['$$item.answer', '$_id.answer']
+                    },
+                    then: {
+                      $multiply: [{
+                        $divide: ['$count', '$_id.total']
+                      }, 100]
+                    },
+                    else: 0
+                  }
+                },
+                isCurrentAccountAnswerCount: {
+                  $cond: [{
+                    $eq: ['$$item.answer', {
+                      $arrayElemAt: ['$currentAccountAnswer', 0]
+                    }]
+                  }, 1, 0]
                 }
-              ]
+              }]
             }
           }
         }
@@ -139,9 +129,7 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository, 
             input: '$answers',
             initialValue: [],
             in: {
-              $concatArrays: [
-                '$$value', '$$this'
-              ]
+              $concatArrays: ['$$value', '$$this']
             }
           }
         }
@@ -155,14 +143,16 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository, 
           question: '$question',
           date: '$date',
           answer: '$answers.answer',
-          image: '$answers.image',
-          isCurrentAccountAnswer: '$answers.isCurrentAccountAnswer'
+          image: '$answers.image'
         },
         count: {
           $sum: '$answers.count'
         },
         percent: {
           $sum: '$answers.percent'
+        },
+        isCurrentAccountAnswerCount: {
+          $sum: '$answers.isCurrentAccountAnswerCount'
         }
       })
       .project({
@@ -175,7 +165,9 @@ export class SurveyResultMongoRepository implements SaveSurveyResultRepository, 
           image: '$_id.image',
           count: round('$count'),
           percent: round('$percent'),
-          isCurrentAccountAnswer: '$_id.isCurrentAccountAnswer'
+          isCurrentAccountAnswer: {
+            $eq: ['$isCurrentAccountAnswerCount', 1]
+          }
         }
       })
       .sort({
