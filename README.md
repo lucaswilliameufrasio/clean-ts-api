@@ -1,5 +1,8 @@
 # ForDev NodeJS
 
+[![CI Action Status](https://github.com/lucaswilliameufrasio/clean-ts-api/workflows/CI/badge.svg)](https://github.com/lucaswilliameufrasio/clean-ts-api/workflows/CI/badge.svg)
+[![Coverage Status](https://coveralls.io/repos/github/lucaswilliameufrasio/clean-ts-api/badge.svg?branch=master)](https://coveralls.io/github/lucaswilliameufrasio/clean-ts-api?branch=master)
+
 <div align="center">
 <img width="200"
 src="https://user-images.githubusercontent.com/34021576/106562432-0cdf3d80-6509-11eb-9004-556737c3cdb3.png" alt="4Dev Logo"
