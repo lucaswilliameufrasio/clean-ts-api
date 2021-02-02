@@ -12,7 +12,7 @@ This project was built following along the training of [Rodrigo Manguinho on Ude
 
 - Git
 - Node [version 12.x](https://nodejs.org/en/download/releases/)
-- MongoDB [version 4.x](hhttps://docs.mongodb.com/manual/installation/)
+- MongoDB [version 4.x](https://docs.mongodb.com/manual/installation/)
 
 ### Optional
 - Docker
