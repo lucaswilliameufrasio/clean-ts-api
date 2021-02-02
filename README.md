@@ -39,6 +39,23 @@ $ cd clean-ts-api
 $ yarn install
 ```
 
+- Copy environment file:
+
+
+``` bash
+$ cp .env.example .env
+```
+
+The .env file could be like the example below:
+
+```
+MONGO_URL=mongodb://localhost:27017/clean-node-api
+PORT=7777
+JWT_SECRET=IhTqDm7i1QzKd5k7Bf9CXbU3KZt1Kddgifn2MH5gff1xWjsB
+```
+
+
+
 <h2 id="usage">📦 Usage</h2>
 
 - To run the app in development mode:
