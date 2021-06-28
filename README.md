@@ -9,7 +9,7 @@ src="https://user-images.githubusercontent.com/34021576/106562432-0cdf3d80-6509-
     />
 </div>
 
-This project was built following along the training of [Rodrigo Manguinho on Udemy](https://www.udemy.com/course/tdd-com-mango/) and has the purpose to learn to build Web Services with NodeJS following best practices, applying SOLID, TDD, Design Patterns, Clean Architecture, DDD, and so on. We also had added Swagger, Docker, and CI/CD with Travis that then i have modified it to run in Github Actions.
+This project was built following the training of [Rodrigo Manguinho on Udemy](https://www.udemy.com/course/tdd-com-mango/) and has the purpose of learning to build Web Services with NodeJS following best practices, applying SOLID, TDD, Design Patterns, Clean Architecture, DDD, and so on. We also added Swagger, Docker, and CI/CD with Travis, which I modified to run in Github Actions.
 
 <h2 id="requirements">🖥 Requirements </h2>
 
