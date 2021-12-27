@@ -10,7 +10,13 @@ module.exports = {
   testEnvironment: 'node',
   preset: '@shelf/jest-mongodb',
   transform: {
-    '.+\\.ts$': 'ts-jest'
+    '^.+\\.(t|j)sx?$': [
+      '@swc-node/jest',
+      // Configurations available: https://github.com/Brooooooklyn/swc-node/blob/master/packages/core/index.ts#L6
+      {
+        dynamicImport: true
+      }
+    ]
   },
   moduleNameMapper: {
     '@/tests/(.*)': '<rootDir>/tests/$1',
