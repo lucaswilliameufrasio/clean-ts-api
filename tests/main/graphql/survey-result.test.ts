@@ -3,9 +3,9 @@ import env from '@/main/config/env'
 import { MongoHelper } from '@/infra/db'
 
 import { createTestClient } from 'apollo-server-integration-testing'
+import { ApolloServer, gql } from 'apollo-server-express'
 import { Collection } from 'mongodb'
 import { sign } from 'jsonwebtoken'
-import { ApolloServer, gql } from 'apollo-server-express'
 
 let surveyCollection: Collection
 let accountCollection: Collection
@@ -163,7 +163,7 @@ describe('SurveyResult GraphQL', () => {
         }, {
           answer: 'Answer 2'
         }],
-        date: new Date()
+        date: now
       })
 
       const { mutate } = createTestClient({
