@@ -17,7 +17,7 @@ const makeAccessToken = async (): Promise<string> => {
     email: 'lucaseufrasio@gmail.com',
     password: '123'
   })
-  const id = result.ops[0]._id
+  const id = result.insertedId
 
   const accessToken = sign({ id }, env.jwtSecret)
   await accountCollection.updateOne({
@@ -33,7 +33,7 @@ const makeAccessToken = async (): Promise<string> => {
 
 describe('SurveyResult GraphQL', () => {
   beforeAll(async () => {
-    apolloServer = makeApolloServer()
+    apolloServer = await makeApolloServer()
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 
@@ -90,7 +90,7 @@ describe('SurveyResult GraphQL', () => {
 
       const response: any = await query(surveyResultQuery, {
         variables: {
-          surveyId: surveyRes.ops[0]._id.toString()
+          surveyId: surveyRes.insertedId.toHexString()
         }
       })
 
@@ -127,7 +127,7 @@ describe('SurveyResult GraphQL', () => {
 
       const response: any = await query(surveyResultQuery, {
         variables: {
-          surveyId: surveyRes.ops[0]._id.toString()
+          surveyId: surveyRes.insertedId.toHexString()
         }
       })
       expect(response.data).toBeFalsy()
@@ -177,7 +177,7 @@ describe('SurveyResult GraphQL', () => {
 
       const response: any = await mutate(saveSurveyResultMutation, {
         variables: {
-          surveyId: surveyRes.ops[0]._id.toString(),
+          surveyId: surveyRes.insertedId.toHexString(),
           answer: 'Answer 1'
         }
       })
@@ -215,7 +215,7 @@ describe('SurveyResult GraphQL', () => {
 
       const response: any = await mutate(saveSurveyResultMutation, {
         variables: {
-          surveyId: surveyRes.ops[0]._id.toString(),
+          surveyId: surveyRes.insertedId.toHexString(),
           answer: 'Answer 1'
         }
       })

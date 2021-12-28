@@ -11,7 +11,7 @@ let apolloServer: ApolloServer
 
 describe('Login GraphQL', () => {
   beforeAll(async () => {
-    apolloServer = makeApolloServer()
+    apolloServer = await makeApolloServer()
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 

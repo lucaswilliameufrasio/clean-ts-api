@@ -14,7 +14,7 @@ const makeAccessToken = async (): Promise<string> => {
     email: 'lucaseufrasio@gmail.com',
     password: '123'
   })
-  const id = result.ops[0]._id
+  const id = result.insertedId
 
   const accessToken = sign({ id }, env.jwtSecret)
   await accountCollection.updateOne({
@@ -65,7 +65,7 @@ describe('Survey Routes', () => {
         }],
         date: new Date()
       })
-      const surveyId: string = result.ops[0]._id
+      const surveyId: string = result.insertedId
       const accessToken = await makeAccessToken()
 
       await request(app)
@@ -97,7 +97,7 @@ describe('Survey Routes', () => {
         }],
         date: new Date()
       })
-      const surveyId: string = result.ops[0]._id
+      const surveyId: string = result.insertedId
 
       await request(app)
         .get(`/api/surveys/${surveyId}/results`)

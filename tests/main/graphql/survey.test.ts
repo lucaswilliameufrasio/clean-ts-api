@@ -17,7 +17,7 @@ const makeAccessToken = async (): Promise<string> => {
     email: 'lucaseufrasio@gmail.com',
     password: '123'
   })
-  const id = result.ops[0]._id
+  const id = result.insertedId
 
   const accessToken = sign({ id }, env.jwtSecret)
   await accountCollection.updateOne({
@@ -33,7 +33,7 @@ const makeAccessToken = async (): Promise<string> => {
 
 describe('Survey GraphQL', () => {
   beforeAll(async () => {
-    apolloServer = makeApolloServer()
+    apolloServer = await makeApolloServer()
     await MongoHelper.connect(process.env.MONGO_URL)
   })
 

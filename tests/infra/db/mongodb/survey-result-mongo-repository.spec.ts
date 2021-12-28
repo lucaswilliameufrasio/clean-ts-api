@@ -13,14 +13,15 @@ const makeSut = (): SurveyResultMongoRepository => {
 
 const makeSurvey = async (): Promise<SurveyModel> => {
   const response = await surveyCollection.insertOne(mockAddSurveyParams())
+  const surveyCreated = await surveyCollection.findOne({ _id: response.insertedId })
 
-  return MongoHelper.map(response.ops[0])
+  return MongoHelper.map(surveyCreated)
 }
 
-const mockAccountId = async (): Promise<string> => {
+const mockAccountId = async (): Promise<ObjectId> => {
   const response = await accountCollection.insertOne(mockAddAccountParams())
 
-  return response.ops[0]._id
+  return response.insertedId
 }
 
 describe('SurveyResultMongoRepository', () => {
@@ -49,13 +50,13 @@ describe('SurveyResultMongoRepository', () => {
 
       await sut.save({
         surveyId: survey.id,
-        accountId: accountId,
+        accountId: accountId.toHexString(),
         answer: survey.answers[0].answer,
         date: new Date()
       })
 
       const surveyResult = await surveyResultCollection.findOne({
-        surveyId: survey.id,
+        surveyId: new ObjectId(survey.id),
         accountId: accountId
       })
 
@@ -74,7 +75,7 @@ describe('SurveyResultMongoRepository', () => {
       const sut = makeSut()
       await sut.save({
         surveyId: survey.id,
-        accountId: accountId,
+        accountId: accountId.toHexString(),
         answer: survey.answers[1].answer,
         date: new Date()
       })
@@ -107,7 +108,7 @@ describe('SurveyResultMongoRepository', () => {
         date: new Date()
       }])
       const sut = makeSut()
-      const surveyResult = await sut.loadBySurveyId(survey.id, accountId)
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId.toHexString())
 
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.surveyId).toEqual(survey.id)
@@ -141,7 +142,7 @@ describe('SurveyResultMongoRepository', () => {
         date: new Date()
       }])
       const sut = makeSut()
-      const surveyResult = await sut.loadBySurveyId(survey.id, accountId2)
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId2.toHexString())
 
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.surveyId).toEqual(survey.id)
@@ -170,7 +171,7 @@ describe('SurveyResultMongoRepository', () => {
         date: new Date()
       }])
       const sut = makeSut()
-      const surveyResult = await sut.loadBySurveyId(survey.id, accountId3)
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId3.toHexString())
 
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.surveyId).toEqual(survey.id)
@@ -186,7 +187,7 @@ describe('SurveyResultMongoRepository', () => {
       const survey = await makeSurvey()
       const accountId = await mockAccountId()
       const sut = makeSut()
-      const surveyResult = await sut.loadBySurveyId(survey.id, accountId)
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId.toHexString())
 
       expect(surveyResult).toBeNull()
     })
@@ -208,7 +209,7 @@ describe('SurveyResultMongoRepository', () => {
       }])
 
       const sut = makeSut()
-      const surveyResult = await sut.loadBySurveyId(survey.id, accountId2)
+      const surveyResult = await sut.loadBySurveyId(survey.id, accountId2.toHexString())
 
       expect(surveyResult).toBeTruthy()
       expect(surveyResult.surveyId).toEqual(survey.id)

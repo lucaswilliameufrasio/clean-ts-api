@@ -83,12 +83,13 @@ describe('AccountMongoRepository', () => {
       const sut = makeSut()
 
       const res = await accountCollection.insertOne(mockAddAccountParams())
+      const createdAccountId = res.insertedId
 
-      const fakeAccount = res.ops[0]
+      const fakeAccount = await accountCollection.findOne({ _id: createdAccountId })
       expect(fakeAccount.accessToken).toBeFalsy()
 
-      const accessToken = faker.random.uuid()
-      await sut.updateAccessToken(fakeAccount._id, accessToken)
+      const accessToken = faker.datatype.uuid()
+      await sut.updateAccessToken(createdAccountId.toString(), accessToken)
       const account = await accountCollection.findOne({ _id: fakeAccount._id })
 
       expect(account).toBeTruthy()

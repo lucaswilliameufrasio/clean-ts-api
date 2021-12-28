@@ -1,23 +1,43 @@
+import { getDirective, MapperKind, mapSchema } from '@graphql-tools/utils'
+import { defaultFieldResolver, GraphQLSchema } from 'graphql'
+import { ForbiddenError } from 'apollo-server-express'
 import { makeAuthMiddleware } from '@/main/factories'
-import { ForbiddenError, SchemaDirectiveVisitor } from 'apollo-server-express'
-import { defaultFieldResolver, GraphQLField } from 'graphql'
 
-export class AuthDirective extends SchemaDirectiveVisitor {
-  visitFieldDefinition (field: GraphQLField<any, any>): any {
-    const { resolve = defaultFieldResolver } = field
+export function authDirective (): {
+  authDirectiveTypeDefs: string
+  authDirectiveTransformer: (schema: GraphQLSchema) => GraphQLSchema
+} {
+  const directiveName = 'auth'
+  const typeDirectiveArgumentMaps: Record<string, any> = {}
+  return {
+    authDirectiveTypeDefs: `directive @${directiveName} on FIELD_DEFINITION`,
+    authDirectiveTransformer: (schema: GraphQLSchema) =>
+      mapSchema(schema, {
+        [MapperKind.OBJECT_FIELD]: (fieldConfig, _fieldName, typeName) => {
+          const authDirective =
+            getDirective(schema, fieldConfig, directiveName)?.[0] ?? typeDirectiveArgumentMaps[typeName]
 
-    field.resolve = async (parent, args, context, info) => {
-      const request = {
-        accessToken: context?.req.headers?.['x-access-token']
-      }
+          if (authDirective) {
+            const { resolve = defaultFieldResolver } = fieldConfig
 
-      const httpResponse = await makeAuthMiddleware().handle(request)
-      if (httpResponse.statusCode === 200) {
-        Object.assign(context?.req, httpResponse.body)
-        return resolve.call(this, parent, args, context, info)
-      } else {
-        throw new ForbiddenError(httpResponse.body.message)
-      }
-    }
+            fieldConfig.resolve = async function (source, args, context, info) {
+              const request = {
+                accessToken: context?.req.headers?.['x-access-token']
+              }
+
+              const httpResponse = await makeAuthMiddleware().handle(request)
+
+              if (httpResponse.statusCode === 200) {
+                Object.assign(context?.req, httpResponse.body)
+                return resolve(source, args, context, info)
+              } else {
+                throw new ForbiddenError(httpResponse.body.message)
+              }
+            }
+
+            return fieldConfig
+          }
+        }
+      })
   }
 }
