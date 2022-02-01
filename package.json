@@ -24,6 +24,7 @@
     "test:coveralls": "yarn test:ci && coveralls < coverage/lcov.info"
   },
   "devDependencies": {
+    "@faker-js/faker": "^6.0.0-alpha.5",
     "@shelf/jest-mongodb": "^2.2.0",
     "@swc-node/jest": "^1.4.3",
     "@types/bcrypt": "^5.0.0",
