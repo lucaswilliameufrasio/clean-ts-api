@@ -2,7 +2,7 @@ version: "3"
 services:
   mongo:
     container_name: mongo-container
-    image: mongo:4
+    image: mongo:5
     restart: always
     volumes:
       - ./data:/data/db
@@ -10,15 +10,18 @@ services:
       - "27019:27017"
   api:
     container_name: api-container
-    image: node:12
+    image: node:16-slim
     working_dir: /usr/app/clean-node-api
     restart: always
-    command: bash -c "npm install --only=prod && npm run debug"
+    command: bash -c "yarn install --frozen-lockfile && npm run debug"
     environment:
       - MONGO_URL=mongodb://mongo:27017/clean-node-api
     volumes:
-      - ./dist/:/usr/app/clean-node-api/dist/
+      - ./src/:/usr/app/clean-node-api/src/
+      - ./tsconfig.json:/usr/app/clean-node-api/tsconfig.json
+      - ./tsconfig-build.json:/usr/app/clean-node-api/tsconfig-build.json
       - ./package.json:/usr/app/clean-node-api/package.json
+      - ./yarn.lock:/usr/app/clean-node-api/yarn.lock
     ports:
       - "7777:7777"
       - "9222:9222"
