@@ -3,7 +3,7 @@ import { badRequest, serverError, noContent } from '@/presentation/helpers'
 import { AddSurveySpy, ValidationSpy } from '@/tests/presentation/mocks'
 import { throwError } from '@/tests/domain/mocks'
 import MockDate from 'mockdate'
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 const mockRequest = (): AddSurveyController.Request => ({
   question: faker.random.words(),

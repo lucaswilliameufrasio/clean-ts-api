@@ -2,7 +2,7 @@ import { LogControllerDecorator } from '@/main/decorators'
 import { Controller, HttpResponse } from '@/presentation/protocols'
 import { serverError, ok } from '@/presentation/helpers'
 import { LogErrorRepositorySpy } from '@/tests/data/mocks'
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 class ControllerSpy implements Controller {
   httpResponse = ok(faker.random.uuid())

@@ -1,7 +1,7 @@
 import { CheckSurveyByIdRepositorySpy } from '@/tests/data/mocks'
 import { throwError } from '@/tests/domain/mocks'
 import { DbCheckSurveyById } from '@/data/usecases'
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 type SutTypes = {
   sut: DbCheckSurveyById

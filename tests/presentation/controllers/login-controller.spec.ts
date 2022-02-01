@@ -2,7 +2,7 @@ import { LoginController } from '@/presentation/controllers'
 import { MissingParamError } from '@/presentation/errors'
 import { badRequest, serverError, unauthorizedError, ok } from '@/presentation/helpers'
 import { AuthenticationSpy, ValidationSpy } from '@/tests/presentation/mocks'
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 const mockRequest = (): LoginController.Request => ({
   email: faker.internet.email(),

@@ -1,7 +1,7 @@
 import { AddAccount } from '@/domain/usecases/add-account'
 import { Authentication } from '@/domain/usecases/authentication'
 import { LoadAccountByToken } from '@/domain/usecases/load-account-by-token'
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 
 export class AddAccountSpy implements AddAccount {
   result = true
