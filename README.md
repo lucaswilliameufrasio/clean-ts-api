@@ -14,8 +14,8 @@ This project was built following the training of [Rodrigo Manguinho on Udemy](ht
 <h2 id="requirements">🖥 Requirements </h2>
 
 - Git
-- Node [version 12.x](https://nodejs.org/en/download/releases/)
-- MongoDB [version 4.x](https://docs.mongodb.com/manual/installation/)
+- Node [version 16.x](https://nodejs.org/en/download/releases/)
+- MongoDB [version 5.x](https://docs.mongodb.com/manual/installation/)
 
 ### Optional
 - Docker
