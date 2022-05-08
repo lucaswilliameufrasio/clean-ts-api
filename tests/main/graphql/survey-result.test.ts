@@ -6,6 +6,7 @@ import { createTestClient } from 'apollo-server-integration-testing'
 import { ApolloServer, gql } from 'apollo-server-express'
 import { Collection } from 'mongodb'
 import { sign } from 'jsonwebtoken'
+import MockDate from 'mockdate'
 
 let surveyCollection: Collection
 let accountCollection: Collection
@@ -42,6 +43,9 @@ describe('SurveyResult GraphQL', () => {
   })
 
   beforeEach(async () => {
+    MockDate.reset()
+    MockDate.set(new Date())
+
     surveyCollection = await MongoHelper.getCollection('surveys')
     await surveyCollection.deleteMany({})
     accountCollection = await MongoHelper.getCollection('accounts')
